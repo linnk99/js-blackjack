@@ -3,24 +3,46 @@
 // by Hector Vega
 //
 
+//Card variables
 let suits = ['Hearts', 'Clubs', 'Diamonds', 'Spades']
 let values = ['Ace', 'King', 'Queen', 'Jack',
     'Ten', 'Nine', 'Eight', 'Seven', 'Six', 
     'Five', 'Four', 'Three', 'Two']
 
+//DOM variables
 let textArea = document.getElementById('text-area');
 let newGameButton = document.getElementById('new-game-button')
 let hitButton = document.getElementById('hit-button')
 let stayButton = document.getElementById('stay-button')
 
+//Game variables
+let gameStarted = false,
+    gameOver = false,
+    playerWon = false,
+    dealerCards = [],
+    playerCards = [],
+    dealerScore = 0,
+    playerScore = 0,
+    deck = []
+
 hitButton.style.display = 'none'
 stayButton.style.display = 'none'
+showStatus()
 
 newGameButton.addEventListener('click', function() {
-    textArea.innerText = 'Started...'
+    gameStarted = true
+    gameOver = false
+    playerWon = false
+    
+    deck = createDeck()
+    shuffleDeck(deck)
+    dealerCards = [ getNextCard(), getNextCard()]
+    playerCards = [ getNextCard(), getNextCard()]
+
     newGameButton.style.display = 'none'
     hitButton.style.display = 'inline'
     stayButton.style.display = 'inline'
+    showStatus()
 })
 
 function createDeck() {
@@ -47,6 +69,13 @@ function getCardString(card) {
     return card.value + ' of ' + card.suit
 }
 
+function ShowStatus() {
+    if (!gameStarted) {
+        textArea.innerText = 'Welcome to Blackjack!'
+        return
+    }
+}
+
 let deck = createDeck()
 
 function shuffleDeck(deck) {
@@ -55,9 +84,6 @@ function shuffleDeck(deck) {
 
 shuffleDeck(deck)
 
-/* for (let i = 0; i < deck.length; i++) {
-    console.log(deck[i])
-} */
 
 let playerCards = [ getNextCard(), getNextCard() ]
 let crupierCards = [ getNextCard(), getNextCard()]
@@ -67,14 +93,3 @@ console.log("Welcome to Blackjack!")
 console.log("You're dealt: ")
 console.log(" " + getCardString(playerCards[0]))
 console.log(" " + getCardString(playerCards[1]))
-
-/* let textArea = document.getElementById('text-area')
-let okButton = document.getElementById('ok-button')
-
-textArea.style.display = 'none'
-
-okButton.addEventListener('click', function() {
-    //textArea.innerText = 'Button clicked!'
-    textArea.style.display = 'block'
-})
- */
