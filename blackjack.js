@@ -45,6 +45,18 @@ newGameButton.addEventListener('click', function() {
     showStatus()
 })
 
+hitButton.addEventListener('click', function() {
+    playerCards.push(getNextCard())
+    checkForEndOfGame()
+    showStatus()
+})
+
+stayButton.addEventListener('click', function() {
+    gameOver = true
+    checkForEndOfGame()
+    showStatus()
+})
+
 function createDeck() {
     let deck = []
     for (let suitIdx = 0; suitIdx < suits.length; suitIdx++) {
@@ -113,7 +125,7 @@ function getScore(cardArray) {
         score += getCardNumericValue(card)
         
         if (card.value === 'Ace') {
-            haceAce = true
+            hasAce = true
         }
     }
 
@@ -127,6 +139,45 @@ function getScore(cardArray) {
 function updateScores() {
     dealerScore = getScore(dealerCards)
     playerScore = getScore(playerCards)
+}
+
+function checkForEndOfGame() {
+
+    updateScores()
+
+    if (gameOver){
+        //let dealer take cards
+        while (dealerScore < playerScore
+        && playerScore <= 21
+        && dealerScore <= 21) {
+            dealerCards.push(getNextCard())
+            updateScores()
+        }
+    }
+    
+    
+    if (playerScore > 21) {
+        playerWon = false
+        gameOver = true
+    } else if (dealerScore > 21) {
+        playerWon = true
+        gameOver = true
+    } else if (playerScore == 21) {
+        playerWon = true
+        gameOver = true
+    } else if (gameOver) {
+
+        if (playerScore > dealerScore) {
+            playerWon = true
+        } else {
+            playerWon = false
+        }
+
+        newGameButton.style.display = 'inline'
+        hitButton.style.display = 'none'
+        stayButton.style.display = 'none'
+    }
+
 }
 
 function showStatus() {
